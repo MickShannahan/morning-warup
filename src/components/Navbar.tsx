@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Login from "./Login";
+import './Navbar.scss'
 import { useEffect, useState } from 'react';
 
 export function Navbar() {
@@ -29,36 +29,19 @@ export function Navbar() {
 
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-      <Link className="navbar-brand d-flex" to={''}>
-        <div className="d-flex flex-column align-items-center">
-          <img alt="logo" src='cw-logo.png' height="45" />
-        </div>
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarText"
-        aria-controls="navbarText"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarText">
-        <ul className="navbar-nav me-auto">
-          <li>
-            <Link to={'About'} className="btn text-success lighten-30 selectable text-uppercase">
-              About
-            </Link>
-          </li>
-        </ul>
-        <div className='d-flex gap-2'>
-          <ThemeToggler />
-          <Login />
-        </div>
-      </div >
-    </nav >
+    <nav className="container-fluid p-1">
+      <div className="card px-3">
+        <section className="d-flex align-items-center justify-content-between">
+          <div><i className="mdi mdi-account-circle fs-3 text-primary"></i></div>
+          <div>
+            <img className="logo" src="" alt="" />
+            <span className="fs-4 fw-bold">Uma Workout</span>
+          </div>
+          <div>
+            <i className="mdi mdi-cog"></i>
+          </div>
+        </section>
+      </div>
+    </nav>
   )
 }
