@@ -1,0 +1,23 @@
+@import "./_variables.scss";
+@import "./_utilities.scss";
+@import "./_loaders.scss";
+
+body {
+  overscroll-behavior: none;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bs-page);
+  transition: background-color .5s ease;
+}
+
+main {
+  flex-grow: 1;
+}
+
+a {
+  text-decoration: none;
+}
