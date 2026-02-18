@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { logger } from "../utils/Logger";
 import { Time } from "../utils/easyTimes";
+import { Link } from "react-router-dom";
 
 
 
@@ -8,28 +9,30 @@ function TimeButtons() {
   const timeOptions = [
     {
       title: '5 min',
-      time: Time.minutes(5)
+      time: 5
     },
     {
       title: '7 min',
-      time: Time.minutes(7)
+      time: 7
     },
     {
       title: '10 min',
-      time: Time.minutes(10)
+      time: 10
     },
     {
       title: '12 min',
-      time: Time.minutes(12)
+      time: 12
     },
     {
       title: '15 min',
-      time: Time.minutes(15)
+      time: 15
     },
   ]
   return timeOptions.map((opt) => {
     return (
-      <button className="btn btn-light">{opt.title}</button>
+      <Link to={`workout?duration=${opt.time}`} key={opt.title}>
+        <button className="btn btn-light">{opt.title}</button>
+      </Link>
     )
   })
 }

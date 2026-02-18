@@ -31,6 +31,18 @@ class ObservableAppState {
         img: defaultGif,
       }),
       new Workout({
+        name: 'Ballet Squats',
+        img: defaultGif,
+      }),
+      new Workout({
+        name: 'Trunk Twists',
+        img: defaultGif,
+      }),
+      new Workout({
+        name: 'Arm Rotations',
+        img: defaultGif,
+      }),
+      new Workout({
         name: 'Back Lunges',
         img: defaultGif,
       }),
