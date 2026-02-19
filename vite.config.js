@@ -18,5 +18,5 @@ export default defineConfig({
     port: 8080
   },
   // uncomment this to build for GitHub Pages
-  // base: '/morning-warup/'
+  base: '/morning-warup/'
 })

@@ -15,8 +15,8 @@ export function WorkOutPage() {
   const [completedWorkouts, setCompletedWorkouts] = useState<number>(0)
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null)
   const [playingWorkout, setPlayingWorkout] = useState(false)
-  const [workoutTimer, setWorkoutTimer] = useState(0)
-  const workoutInterval = useRef<number | undefined>(undefined)
+  const [workoutTimer, setWorkoutTimer] = useState<number>(0)
+  const workoutInterval = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   useEffect(() => {
     const randomWorkouts = GetRandomSet(AppState.workouts, workoutCount)
@@ -46,7 +46,7 @@ export function WorkOutPage() {
   function tickWorkoutTimer() {
     setWorkoutTimer(t => {
       if (!activeWorkout) { return t }
-      logger.log('⌚', t + 1, activeWorkout?.duration / 1000)
+      // logger.log('⌚', t + 1, activeWorkout?.duration / 1000)
       const currentTime = t + 1
       if (currentTime >= (activeWorkout?.duration / 1000)) nextWorkout()
       return currentTime
@@ -73,6 +73,14 @@ export function WorkOutPage() {
           <div className="card-body">
             <div className="d-flex justify-content-around">
               {workouts.map((workout, i) => {
+                if (workout == activeWorkout) return (
+                  <i key={`dot-${i}`} className="mdi mdi-circle text-primary"></i>
+                )
+
+                if (i <= completedWorkouts) return (
+                  <i key={`dot-${i}`} className="mdi mdi-circle"></i>
+                )
+
                 return (
                   <i key={`dot-${i}`} className="mdi mdi-circle-outline"></i>
                 )

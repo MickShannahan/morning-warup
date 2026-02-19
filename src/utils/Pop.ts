@@ -1,4 +1,30 @@
 
+type ColorKey = 'success' | 'error' | 'info' | 'warning' | 'default' | 'primary' | 'secondary' | 'danger' | 'blue' | 'red' | 'yellow' | 'orange' | 'purple' | 'pink' | 'indigo' | 'green' | 'teal' | 'light' | 'dark' | 'cyan' | 'gray' | 'black'
+
+type InputType = 'number' | 'text' | 'color' | 'checkbox' | 'range' | 'date' | 'datetime-local' | 'radio' | 'file' | 'url' | 'password'
+
+interface ToastOptions {
+  footer?: string
+  timer?: number
+  classesToAdd?: string[]
+  color?: ColorKey
+}
+
+interface PromptOptions {
+  min?: number
+  max?: number
+  minLength?: number
+  maxLength?: number
+  step?: number
+  required?: boolean
+  placeholder?: string
+  value?: string | number
+  showValue?: boolean
+  confirmText?: string
+  cancelText?: string
+  parseType?: boolean
+}
+
 const colorConfig = {
   confirmButtonColor: 'var(--bs-success, #00b894)',
   cancelButtonColor: 'var(--bs-danger, #d63031)',
@@ -11,7 +37,7 @@ const colorConfig = {
 }
 
 export class Pop {
-  static createDialog(content) {
+  static createDialog(content: string): HTMLDialogElement | null {
     if (typeof document === 'undefined') return null
 
     const dialog = document.createElement('dialog')
@@ -28,16 +54,15 @@ export class Pop {
     return dialog
   }
 
-  static success(title, message) {
-    this.toast(title ?? 'Success!', message, 'check-bold', { color: 'success' });
+  static success(title?: string, message?: string): void {
+    this.toast(title ?? 'Success!', message ?? '', 'check-bold', { color: 'success' })
   }
 
-  static error(error, title, hint) {
+  static error(error: Error | unknown, title?: string, hint?: string): void {
+    const errorMessage = error instanceof Error ? error.message : 'Something went wrong'
     this.toast(
       title ?? 'Oh No!',
-      error?.message
-        ? `<div class="dialog-err-msg">${error.message}</div>`
-        : 'Something went wrong',
+      errorMessage ? `<div class="dialog-err-msg">${errorMessage}</div>` : 'Something went wrong',
       'alert-decagram',
       {
         footer: hint ?? 'Refresh the page and try again. If the issue persists, please let us know.',
@@ -46,27 +71,18 @@ export class Pop {
     )
   }
 
-
-  /**
-   * @typedef toastOptions
-   * @property {string} [footer] tertiary text to appear in the bottom of the toast
-   * @property {number} [timer] Time for toast to dismiss itself
-   * @property {string[]} [classesToAdd] array of classes that will be added to the toast. Can be used to customize the toast notification 
-   * @property {('primary'|'secondary'|'info'|'warning'|'danger'|'success'|'blue'|'red'|'yellow'|'orange'|'purple'|'pink'|'purple'|'indigo'|'green'|'teal'|'light'|'dark'|'cyan'|'gray'|'black')} [color] color based off the bootstrap extended colors
-   * 
-   * @param {string} title 
-   * @param {string} text 
-   * @param {string} icon mdi icon without including the 'mdi-'
-   * @param {toastOptions} [options] 
-   * @returns {HTMLElement} the toast element draw to page
-   */
-  static toast(title = 'Toast is ready', text = '', icon = 'information', options = {}) {
+  static toast(
+    title: string = 'Toast is ready',
+    text: string = '',
+    icon: string = 'information',
+    options: ToastOptions = {}
+  ): HTMLElement | null {
     let { footer = '', color = '', timer = 5000, classesToAdd = [] } = options
     if (typeof document === 'undefined') return null
     if (color) color = 'bg-' + color
     const toast = document.createElement('div')
     toast.setAttribute('role', 'alert')
-    toast.classList.add('custom-toast', 'border-0', 'text-' + color, 'toast', 'show', color || undefined)
+    toast.classList.add('custom-toast', 'border-0', 'text-' + color, 'toast', 'show', color)
     if (classesToAdd) classesToAdd.forEach(c => toast.classList.add(c))
     toast.setAttribute('style', '--bs-bg-opacity: .4;')
 
@@ -95,16 +111,21 @@ export class Pop {
     }
 
     const toastContainer = document.getElementById('pop-toast-container') ?? this.createToastContainer()
-    toastContainer.appendChild(toast);
+    toastContainer?.appendChild(toast)
 
     setTimeout(() => {
       toast.remove()
-    }, timer);
+    }, timer)
     return toast
   }
 
 
-  static async confirm(title = 'Are you sure?', text = '', confirmText = 'yes', cancelText = 'no') {
+  static async confirm(
+    title: string = 'Are you sure?',
+    text: string = '',
+    confirmText: string = 'yes',
+    cancelText: string = 'no'
+  ): Promise<boolean> {
     return new Promise((resolve) => {
       const dialog = this.createDialog(`
         <div class="dialog-body">
@@ -118,40 +139,27 @@ export class Pop {
         </div>
       `);
 
-      dialog.querySelector('#confirm-button').addEventListener('click', () => {
-        resolve(true);
-        dialog.close();
-      });
+      const confirmButton = dialog?.querySelector('#confirm-button')
+      const cancelButton = dialog?.querySelector('#cancel-button')
 
-      dialog.querySelector('#cancel-button').addEventListener('click', () => {
-        resolve(false);
-        dialog.close();
-      });
-    });
+      confirmButton?.addEventListener('click', () => {
+        resolve(true)
+        dialog?.close()
+      })
+
+      cancelButton?.addEventListener('click', () => {
+        resolve(false)
+        dialog?.close()
+      })
+    })
   }
 
-  /**
-   * @typedef promptOptions
-   * @property  {number} [min] minimum number
-   * @property  {number} [max] maximum number
-   * @property  {number} [minLength] min string length
-   * @property  {number} [maxLength] max string length
-   * @property  {number} [step] step amount for range
-   * @property  {number} [required] is this required to submit prompt
-   * @property  {*} [placeholder] placeholder for input
-   * @property  {*} [value] starting value for input
-   * @property  {boolean} [showValue] draw the value of the input above it
-   * @property  {string} [confirmText] text to appear in confirm button
-   * @property  {string} [cancelText] text to appear in cancel button
-   * @property  {boolean} [parseType] will the prompt attempt to parse the input into a more JS friendly type
-   * 
-   * @param {('number'|'text'| 'color'|'checkbox'|'range'|'date'|'datetime-local'|'radio'|'file'|'url'|'password')} type input type for prompt  
-   * @param {string} title 
-   * @param {string} text 
-   * @param {promptOptions} options 
-   * @returns {Promise} promise fulfilled with the value of the input or null after prompt is submitted
-   */
-  static async prompt(type = 'text', title = 'Please Enter a value', text = '', options = {}) {
+  static async prompt(
+    type: InputType = 'text',
+    title: string = 'Please Enter a value',
+    text: string = '',
+    options: PromptOptions = {}
+  ): Promise<string | number | Date | boolean | null> {
     let inputClass =
       type == 'checkbox' ? 'form-check-input' :
         type == 'radio' ? 'form-check-input' :
@@ -169,13 +177,13 @@ export class Pop {
           <form id="pop-prompt-form">
           ${showValue ? `<label class="form-label text-center w-100 fw-bold" id="pop-prompt-value">...</label>` : ''}
             <input id="pop-prompt-input" class="${inputClass}" type="${type}" 
-            ${value ? `value="${value}"` : ''} 
-            ${placeholder ? `placeholder="${placeholder}"` : ''} 
-            ${min ? `min="${min}"` : ''} 
-            ${max ? `max="${max}"` : ''} 
-            ${minLength ? `minLength="${minLength}"` : ''} 
-            ${maxLength ? `maxLength="${maxLength}"` : ''} 
-            ${step ? `step="${step}"` : ''} 
+            ${value ? `value="${value}"` : ''}
+            ${placeholder ? `placeholder="${placeholder}"` : ''}
+            ${min ? `min="${min}"` : ''}
+            ${max ? `max="${max}"` : ''}
+            ${minLength ? `minLength="${minLength}"` : ''}
+            ${maxLength ? `maxLength="${maxLength}"` : ''}
+            ${step ? `step="${step}"` : ''}
             ${required ? `required` : ''} />
           </form >
         <div class="dialog-buttons d-flex">
@@ -184,34 +192,38 @@ export class Pop {
         </div>
         </div >
         `);
-      const dialogLabel = dialog.querySelector('#pop-prompt-value')
-      const dialogInput = dialog.querySelector('#pop-prompt-input')
-      const confirmButton = dialog.querySelector('#confirm-button')
-      dialogInput.addEventListener('input', () => {
-        // @ts-ignore
-        if (dialogInput.checkValidity()) confirmButton.removeAttribute('disabled')
-        else confirmButton.setAttribute('disabled', 'true')
-        // @ts-ignore
-        if (showValue) dialogLabel.textContent = dialogInput.value
+
+      const dialogLabel = dialog?.querySelector<HTMLLabelElement>('#pop-prompt-value')
+      const dialogInput = dialog?.querySelector<HTMLInputElement>('#pop-prompt-input')
+      const confirmButton = dialog?.querySelector<HTMLButtonElement>('#confirm-button')
+      const dialogForm = dialog?.querySelector<HTMLFormElement>('#pop-prompt-form')
+      const cancelButton = dialog?.querySelector<HTMLButtonElement>('#cancel-button')
+
+      dialogInput?.addEventListener('input', () => {
+        if (dialogInput.checkValidity()) confirmButton?.removeAttribute('disabled')
+        else confirmButton?.setAttribute('disabled', 'true')
+        if (showValue) dialogLabel!.textContent = dialogInput.value
       })
-      dialog.querySelector('#pop-prompt-form').addEventListener('submit', (e) => {
+
+      dialogForm?.addEventListener('submit', (e) => {
         e.preventDefault()
-        // @ts-ignore
-        let input = document.getElementById('pop-prompt-input').value
-        if (parseType) resolve(_tryParseInput(input, type))
-        resolve(_tryParseInput(input, type))
-        dialog.close();
-      });
+        const input = dialogInput?.value ?? ''
+        if (parseType) {
+          resolve(_tryParseInput(input, type))
+        } else {
+          resolve(input)
+        }
+        dialog?.close()
+      })
 
-      dialog.querySelector('#cancel-button').addEventListener('click', () => {
+      cancelButton?.addEventListener('click', () => {
         resolve(null)
-        dialog.close()
-      });
-    });
-
+        dialog?.close()
+      })
+    })
   }
 
-  static createToastContainer() {
+  static createToastContainer(): HTMLElement {
     const container = document.createElement('div')
     container.id = 'pop-toast-container'
     document.body.appendChild(container)
@@ -219,8 +231,7 @@ export class Pop {
   }
 }
 
-
-function _tryParseInput(value, type) {
+function _tryParseInput(value: string, type: InputType): string | number | Date | boolean {
   switch (type) {
     case 'range':
     case 'number': return parseFloat(value)
