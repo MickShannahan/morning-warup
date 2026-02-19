@@ -8,16 +8,29 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.message, 'deploy')
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Checkout code 👀
+        uses: actions/checkout@v3
 
-      # This example project is built using npm and outputs the result to the 'dist' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-      - name: Install and Build 🔧 
-        run: |
-          npm ci
-          npm run build
+      - name: Install dependencies 📦
+        working-directory: ./ # Specify the folder where the app code resides (./client for fullstack applications).
+        run: npm ci # Clean install of the project's dependencies.
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      # Build the application
+      - name: Build the app 🏗️
+        working-directory: ./
+        run: npm run build # Runs the 'build' script defined in the package.json file
+
+      # Configure the GitHub Pages deployment
+      - name: Setup Pages 📃
+        uses: actions/configure-pages@v4
+
+      # Uploads the build output for deployment to GitHub Pages.
+      - name: Upload artifact ⬆️
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: dist # The folder the action should deploy.
+          path: "./docs" # Path to the built app's static files, this can be configured in the `vite.config` file with 'outputDir'
+
+      # Deploy the application to GitHub Pages using the 'deploy-pages' pre-build action.
+      - name: Deploy to GitHub Pages ✨
+        id: deployment
+        uses: actions/deploy-pages@v4
