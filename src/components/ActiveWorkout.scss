@@ -1,0 +1,9 @@
+.playing {
+  transition: all .2s ease;
+}
+
+.paused {
+  transition: all .2s ease;
+  filter: brightness(1.1) saturate(.8);
+  opacity: .5;
+}
