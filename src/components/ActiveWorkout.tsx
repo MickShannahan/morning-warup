@@ -7,8 +7,8 @@ export default function ActiveWorkout({ workout, workoutPlayState }: { workout: 
 
   return (
     <section>
-      <div className="fs-1 text-center fw-bold">
-        {workout.name} {workoutPlayState ? '▶️' : '⏸️'}
+      <div className="workout-title text-center fw-bold">
+        {workout.name}
       </div>
       <div className={`${workoutPlayState ? 'playing' : 'paused'}`}>
         <div className="text-center">

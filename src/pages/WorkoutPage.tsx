@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react"
+import './WorkoutPage.scss'
 import { useSearchParams } from "react-router-dom"
 import { logger } from "../utils/Logger"
 import { AppState } from "../AppState"
-import { GetRandomSet } from "../utils/Random"
+import { GetRandomSet, InjectBreathers } from "../utils/Random"
 import { Workout } from "../models/Workout"
 import ActiveWorkout from "../components/ActiveWorkout"
+import WakeLock from "../components/WakeLock"
 
 
 export function WorkOutPage() {
@@ -20,8 +22,9 @@ export function WorkOutPage() {
 
   useEffect(() => {
     const randomWorkouts = GetRandomSet(AppState.workouts, workoutCount)
-    setWorkouts(randomWorkouts)
-    logger.log('🏋️', randomWorkouts)
+    const injectedBreathers = InjectBreathers(randomWorkouts)
+    setWorkouts(injectedBreathers)
+    logger.log('🏋️', injectedBreathers)
   }, [])
 
   useEffect(() => {
@@ -56,25 +59,26 @@ export function WorkOutPage() {
   function nextWorkout() {
     logger.log('⏭️')
     setWorkoutTimer(0)
-    if (activeWorkout?.coolDown) {
-      const nextWorkoutNum = completedWorkouts + 1
-      setCompletedWorkouts(nextWorkoutNum)
-      setActiveWorkout(AppState.breather)
-    } else {
-      setActiveWorkout(workouts[completedWorkouts])
-    }
+    const nextWorkoutNum = completedWorkouts + 1
+    setCompletedWorkouts(nextWorkoutNum)
+    setActiveWorkout(workouts[nextWorkoutNum])
   }
 
   return (
     <section className="container-md px-1 py-2 flex-grow-1 d-flex flex-column">
+      <WakeLock keepAlive={playingWorkout}></WakeLock>
       <div className="d-flex flex-column flex-grow-1 justify-content-between">
 
         <article className="card">
           <div className="card-body">
-            <div className="d-flex justify-content-around">
+            <div className="d-flex justify-content-around workout-progress" style={{ '--progress-width': `${(completedWorkouts / workouts.length) * 100}%` } as React.CSSProperties}>
               {workouts.map((workout, i) => {
+                if (workout == AppState.breather) return (
+                  <i key={`dot-${i}`} className="mdi mdi-circle-small opacity-50"></i>
+                )
+
                 if (workout == activeWorkout) return (
-                  <i key={`dot-${i}`} className="mdi mdi-circle text-primary"></i>
+                  <i key={`dot-${i}`} className="mdi mdi-circle"></i>
                 )
 
                 if (i <= completedWorkouts) return (
@@ -82,7 +86,7 @@ export function WorkOutPage() {
                 )
 
                 return (
-                  <i key={`dot-${i}`} className="mdi mdi-circle-outline"></i>
+                  <i key={`dot-${i}`} className="mdi mdi-circle-outline opacity-50"></i>
                 )
               })}
             </div>

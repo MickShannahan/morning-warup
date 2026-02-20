@@ -1,0 +1,24 @@
+.workout-progress {
+  background-color: rgba(var(--bs-primary-rgb), .75);
+  border: 2px rgba(var(--bs-primary-rgb), .75) solid;
+  padding-inline: .25em;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+
+  i {
+    color: var(--bs-light)
+  }
+
+  &:after {
+    content: '';
+    background-color: var(--bs-light);
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--progress-width);
+    border-radius: 50px;
+    transition: width .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+}
