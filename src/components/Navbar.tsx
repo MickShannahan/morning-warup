@@ -35,7 +35,9 @@ export function Navbar() {
           <div><i className="mdi mdi-account-circle fs-3 text-primary"></i></div>
           <div>
             <img className="logo" src="" alt="" />
-            <span className="fs-4 fw-bold">Uma Workout</span>
+            <Link to={'/'}>
+              <span className="fs-4 fw-bold text-dark">Uma Workout</span>
+            </Link>
           </div>
           <div>
             <i className="mdi mdi-cog"></i>

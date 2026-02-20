@@ -1,13 +1,13 @@
 .workout-progress {
   background-color: rgba(var(--bs-primary-rgb), .75);
-  border: 2px rgba(var(--bs-primary-rgb), .75) solid;
+  border: 3px rgba(var(--bs-primary-rgb), .75) solid;
   padding-inline: .25em;
   border-radius: 50px;
   position: relative;
   overflow: hidden;
 
   i {
-    color: var(--bs-light)
+    color: var(--bs-light);
   }
 
   &:after {
@@ -21,4 +21,9 @@
     border-radius: 50px;
     transition: width .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
+}
+
+.workout-timer {
+  font-size: 3em;
+  font-weight: bold;
 }

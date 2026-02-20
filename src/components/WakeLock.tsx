@@ -24,5 +24,5 @@ export default function WakeLock({ keepAlive }: { keepAlive: boolean }) {
     }
   }
 
-  return (<div>wake lock 🔒</div>)
+  return (<div className="d-none">wake lock 🔒</div>)
 }
