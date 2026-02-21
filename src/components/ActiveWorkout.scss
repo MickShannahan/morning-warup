@@ -9,17 +9,17 @@
 }
 
 .workout-title {
-  font-size: 3em;
-  color: var(--bs-light);
+  font-size: 3.25em;
+  color: var(--bs-dark);
 
   text-shadow:
-    -2px -2px 0 #000,
-    2px -2px 0 #000,
-    -2px 2px 0 #000,
-    2px 2px 0 #000,
-    -2px 0 0 #000,
-    2px 0 0 #000,
-    0 -2px 0 #000,
-    0 2px 0 #000,
+    -2px -2px 0 var(--bs-light),
+    2px -2px 0 var(--bs-light),
+    -2px 2px 0 var(--bs-light),
+    2px 2px 0 var(--bs-light),
+    -2px 0 0 var(--bs-light),
+    2px 0 0 var(--bs-light),
+    0 -2px 0 var(--bs-light),
+    0 2px 0 var(--bs-light),
     3px 3px 8px rgba(0, 0, 0, 0.7);
 }

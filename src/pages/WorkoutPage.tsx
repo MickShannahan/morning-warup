@@ -7,6 +7,8 @@ import { GetRandomSet, InjectBreathers } from "../utils/Random"
 import { Workout } from "../models/Workout"
 import ActiveWorkout from "../components/ActiveWorkout"
 import WakeLock from "../components/WakeLock"
+import { router } from "../Router"
+import { playSoundEffect } from "../utils/AudioPlayer"
 
 
 export function WorkOutPage() {
@@ -17,7 +19,7 @@ export function WorkOutPage() {
   const [completedWorkouts, setCompletedWorkouts] = useState<number>(0)
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null)
   const [playingWorkout, setPlayingWorkout] = useState(false)
-  const [workoutTimer, setWorkoutTimer] = useState<number>(0)
+  const [workoutTimer, setWorkoutTimer] = useState<number>(60)
   const workoutInterval = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   useEffect(() => {
@@ -47,21 +49,31 @@ export function WorkOutPage() {
   }
 
   function tickWorkoutTimer() {
+    const playTimes = [30, 10, 8, 6, 4, 3, 2, 1]
     setWorkoutTimer(t => {
       if (!activeWorkout) { return t }
-      // logger.log('⌚', t + 1, activeWorkout?.duration / 1000)
-      const currentTime = t + 1
-      if (currentTime >= (activeWorkout?.duration / 1000)) nextWorkout()
+      const currentTime = t - 1
+      if (currentTime <= 0) nextWorkout()
+      if (activeWorkout != AppState.breather && playTimes.includes(currentTime)) playSoundEffect('tick')
       return currentTime
     })
   }
 
   function nextWorkout() {
     logger.log('⏭️')
-    setWorkoutTimer(0)
     const nextWorkoutNum = completedWorkouts + 1
+    const nextWorkout = workouts[nextWorkoutNum]
+    setWorkoutTimer(nextWorkout.duration / 1000)
     setCompletedWorkouts(nextWorkoutNum)
-    setActiveWorkout(workouts[nextWorkoutNum])
+    setActiveWorkout(nextWorkout)
+    if (!nextWorkout) return endWorkout()
+    playSoundEffect('complete')
+  }
+
+  function endWorkout() {
+    setPlayingWorkout(false)
+    playSoundEffect('ended')
+    router.navigate('/')
   }
 
   return (
