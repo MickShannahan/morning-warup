@@ -9,6 +9,7 @@ import ActiveWorkout from "../components/ActiveWorkout"
 import WakeLock from "../components/WakeLock"
 import { router } from "../Router"
 import { playSoundEffect } from "../utils/AudioPlayer"
+import { streakService } from "../services/StreakService"
 
 
 export function WorkOutPage() {
@@ -49,7 +50,7 @@ export function WorkOutPage() {
   }
 
   function tickWorkoutTimer() {
-    const playTimes = [30, 10, 8, 6, 4, 3, 2, 1]
+    const playTimes = [30, 10, 5, 4, 3, 2, 1]
     setWorkoutTimer(t => {
       if (!activeWorkout) { return t }
       const currentTime = t - 1
@@ -63,16 +64,17 @@ export function WorkOutPage() {
     logger.log('⏭️')
     const nextWorkoutNum = completedWorkouts + 1
     const nextWorkout = workouts[nextWorkoutNum]
-    setWorkoutTimer(nextWorkout.duration / 1000)
     setCompletedWorkouts(nextWorkoutNum)
-    setActiveWorkout(nextWorkout)
     if (!nextWorkout) return endWorkout()
+    setWorkoutTimer(nextWorkout.duration / 1000)
+    setActiveWorkout(nextWorkout)
     playSoundEffect('complete')
   }
 
   function endWorkout() {
     setPlayingWorkout(false)
     playSoundEffect('ended')
+    streakService.addTodayToStreak()
     router.navigate('/')
   }
 

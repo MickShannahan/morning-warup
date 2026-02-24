@@ -6,12 +6,14 @@ import { Workout } from "./models/Workout.ts"
 import defaultGif from './assets/img/example_workouts/default.gif'
 import defaultBreather from './assets/img/example_workouts/defaultBreather.gif'
 import { Time } from "./utils/easyTimes.ts"
+import { streakService } from "./services/StreakService.ts"
 
 
 class ObservableAppState {
 
-  identity: Identity | null = null
-  account: Account | null = null
+  currentStreak: string[]
+  longestStreak: number
+  streakStart: Date
   workouts: Workout[]
   breather: Workout
 
@@ -93,6 +95,9 @@ class ObservableAppState {
       coolDown: 0
     })
     makeAutoObservable(this)
+    this.currentStreak = []
+    this.longestStreak = 0
+    this.streakStart = new Date()
   }
 
 }

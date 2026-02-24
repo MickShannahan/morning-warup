@@ -19,7 +19,7 @@
     height: 100%;
     width: var(--progress-width);
     border-radius: 50px;
-    transition: width .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: width .5s ease;
   }
 }
 

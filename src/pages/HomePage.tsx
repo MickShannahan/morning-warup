@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { logger } from "../utils/Logger";
 import { Link } from "react-router-dom";
+import { AppState } from "../AppState";
+import StreakWeek from "../components/StreakWeek";
 
 
 
@@ -51,7 +53,7 @@ export default function HomePage() {
 
   return (
     <div className="home-page container-md p-1">
-      <div className="card shadow">
+      <div className="card mb-2 shadow">
         <div className="card-body">
           <div className="fw-bold">{weekdays[todayDate.getDay()]}</div>
           <div>{todayDate.toLocaleTimeString('en-us', { hour: 'numeric', minute: '2-digit' })}</div>
@@ -60,6 +62,12 @@ export default function HomePage() {
           <section className="d-flex justify-content-between">
             <TimeButtons />
           </section>
+        </div>
+      </div>
+
+      <div className="card shadow">
+        <div className="card-body">
+          <StreakWeek />
         </div>
       </div>
     </div>

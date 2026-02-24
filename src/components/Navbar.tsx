@@ -34,8 +34,8 @@ export function Navbar() {
         <section className="d-flex align-items-center justify-content-between">
           <div><i className="mdi mdi-account-circle fs-3 text-primary"></i></div>
           <div>
-            <img className="logo" src="" alt="" />
             <Link to={'/'}>
+              <img className="logo" src="/morning-warup/haru_logo.png" alt="" />
               <span className="fs-4 fw-bold text-dark">Uma Workout</span>
             </Link>
           </div>
