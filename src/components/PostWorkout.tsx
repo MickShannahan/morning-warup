@@ -2,15 +2,20 @@ import { useEffect } from "react";
 import { Workout } from "../models/Workout";
 import { streakService } from "../services/StreakService";
 import { playSoundEffect } from "../utils/AudioPlayer";
-import StreakWeek from "./StreakWeek";
-import { Link } from "react-router-dom";
-import confetti from "@hiseb/confetti";
+import JSConfetti from "js-confetti";
+import { AppState } from "../AppState";
 
 export default function PostWorkout({ workoutsCompleted }: { workoutsCompleted: Workout[] }) {
 
   useEffect(() => {
     streakService.addTodayToStreak()
-    confetti()
+    const confetti = new JSConfetti()
+    confetti.addConfetti(
+      {
+        emojis: ['🌸', '🎟️', '🔥', '🟪', '🟦', '🟩', '💗'],
+        emojiSize: 25,
+        confettiNumber: 10 * AppState.currentStreak.length
+      })
     playSoundEffect('ended')
   }, [])
 

@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@bcwdev/auth0provider-client": "0.1.14",
-    "@hiseb/confetti": "^2.1.0",
     "@mdi/font": "7.4.47",
     "axios": "1.7.8",
     "bootstrap": "5.3.3",
+    "js-confetti": "^0.13.1",
     "mobx": "6.13.5",
     "mobx-react": "9.1.1",
     "react": "^18.3.1",
