@@ -8,4 +8,12 @@ export class Time {
   static minutes(timeInMinutes: number) {
     return 1000 * 60 * timeInMinutes
   }
+
+  static hours(timeInHours: number) {
+    return 1000 * 60 * 60 * timeInHours
+  }
+
+  static days(timeInDays: number) {
+    return 1000 * 60 * 60 * 24 * timeInDays
+  }
 }

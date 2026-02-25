@@ -27,7 +27,7 @@ export default function StreakWeek() {
 
   return (
     <section>
-      <div className="fw-bold fs-4"><i className="mdi mdi-fire"></i> <span className="text-primary">{AppState.currentStreak.length} days</span></div>
+      <div className="fw-bold fs-4"><i className="mdi mdi-fire text-danger"></i> <span className="text-primary">{AppState.currentStreak.length} days</span></div>
       <section className="text-secondary">
         Longest streak: {AppState.longestStreak}
       </section>

@@ -13,7 +13,6 @@ class ObservableAppState {
 
   currentStreak: string[]
   longestStreak: number
-  streakStart: Date
   workouts: Workout[]
   breather: Workout
 
@@ -95,9 +94,8 @@ class ObservableAppState {
       coolDown: 0
     })
     makeAutoObservable(this)
-    this.currentStreak = []
+    this.currentStreak = ['1/21/26']
     this.longestStreak = 0
-    this.streakStart = new Date()
   }
 
 }

@@ -1,10 +1,11 @@
 import tickPath from '../assets/sounds/tick_sound.wav'
 import completePath from '../assets/sounds/ui_complete.wav'
+import coinPath from '../assets/sounds/etro-coin-collect.wav'
 import endedPath from '../assets/sounds/urara_xC0V6sg.mp3'
 
 const sounds = {
   tick: tickPath,
-  complete: completePath,
+  complete: coinPath,
   ended: endedPath
 } as const
 
