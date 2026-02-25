@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import './WorkoutPage.scss'
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { logger } from "../utils/Logger"
 import { AppState } from "../AppState"
 import { GetRandomSet, InjectBreathers } from "../utils/Random"
@@ -10,6 +10,8 @@ import WakeLock from "../components/WakeLock"
 import { router } from "../Router"
 import { playSoundEffect } from "../utils/AudioPlayer"
 import { streakService } from "../services/StreakService"
+import PostWorkout from "../components/PostWorkout"
+import StreakWeek from "../components/StreakWeek"
 
 
 export function WorkOutPage() {
@@ -73,9 +75,6 @@ export function WorkOutPage() {
 
   function endWorkout() {
     setPlayingWorkout(false)
-    playSoundEffect('ended')
-    streakService.addTodayToStreak()
-    router.navigate('/')
   }
 
   return (
@@ -107,34 +106,53 @@ export function WorkOutPage() {
           </div>
         </article>
 
-        <ActiveWorkout workout={activeWorkout} workoutPlayState={playingWorkout}></ActiveWorkout>
+        {completedWorkouts == workouts.length && completedWorkouts ?
+          (<PostWorkout workoutsCompleted={workouts}></PostWorkout>)
+          :
+          (<ActiveWorkout workout={activeWorkout} workoutPlayState={playingWorkout}></ActiveWorkout>)
 
-        <article className="card">
-          <div className="card-body">
-            <div className="d-flex justify-content-between align-items-center workout-controls">
-              <section className="workout-timer">
-                <i className="mdi mdi-timer me-2 text-primary"></i>
-                <span>{workoutTimer}</span>
-              </section>
+        }
 
-              <section >
-                {playingWorkout ?
-                  (
-                    <button className="btn btn-primary" onClick={stopWorkout}>
-                      <i className="mdi mdi-pause fs-1"></i>
-                    </button>
-                  ) : (
-                    <button className="btn btn-primary" onClick={playWorkout}>
-                      <i className="mdi mdi-play fs-1"></i>
-                    </button>
-                  )
-                }
-              </section>
+        {completedWorkouts == workouts.length && completedWorkouts ?
+          (
+            <div className="card shadow">
+              <div className="card-body">
+                <StreakWeek />
+                <Link to={'/'} className="w-100 btn btn-primary">Go Back Home</Link>
+              </div>
             </div>
-          </div>
-        </article>
+          )
+          :
+          (
+            <article className="card">
+              <div className="card-body">
+                <div className="d-flex justify-content-between align-items-center workout-controls">
+                  <section className="workout-timer">
+                    <i className="mdi mdi-timer me-2 text-primary"></i>
+                    <span>{workoutTimer}</span>
+                  </section>
 
-      </div>
-    </section>
+                  <section >
+                    {playingWorkout ?
+                      (
+                        <button className="btn btn-primary" onClick={stopWorkout}>
+                          <i className="mdi mdi-pause fs-1"></i>
+                        </button>
+                      ) : (
+                        <button className="btn btn-primary" onClick={playWorkout}>
+                          <i className="mdi mdi-play fs-1"></i>
+                        </button>
+                      )
+                    }
+                  </section>
+                </div >
+              </div >
+            </article >
+          )
+        }
+
+
+      </div >
+    </section >
   )
 }
