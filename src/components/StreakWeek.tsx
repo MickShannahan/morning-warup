@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { AppState } from "../AppState";
 
 
@@ -35,7 +36,7 @@ export default function StreakWeek() {
       <section className="d-flex justify-content-around text-secondary">
         {weekdays.map((day, di) => {
           return (
-            <div key={day.long} style={{ '--bs-bg-opacity': 0.6 }} className={`text-center fw-bold p-2 rounded ${di == todayNumber ? 'bg-white' : ''}`}>
+            <div key={day.long} style={{ '--bs-bg-opacity': 0.6 } as CSSProperties} className={`text-center fw-bold p-2 rounded ${di == todayNumber ? 'bg-white' : ''}`}>
               <div>{day.short}</div>
               {
                 inStreak(thisWeekDays[di]) ?
