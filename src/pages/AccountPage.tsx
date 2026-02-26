@@ -3,12 +3,12 @@ import { AppState } from "../AppState.js";
 
 function AccountPage() {
 
-  const userInfo = AppState.account || AppState.identity
+  const userInfo = AppState.user
 
-  if(!userInfo){
+  if (!userInfo) {
     return <h1>loading...</h1>
   }
-  
+
 
   return (
     <div className="account-page">

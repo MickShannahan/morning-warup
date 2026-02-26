@@ -11,12 +11,14 @@ import { streakService } from "./services/StreakService.ts"
 
 class ObservableAppState {
 
+  user: Account | null
   currentStreak: string[]
   longestStreak: number
   workouts: Workout[]
   breather: Workout
 
   constructor() {
+    this.user = null
     this.workouts = [
       new Workout({
         name: 'Hops',
